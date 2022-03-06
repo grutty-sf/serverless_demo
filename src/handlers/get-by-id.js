@@ -24,7 +24,7 @@ exports.getByIdHandler = async (event) => {
  
   // Get the item from the table
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property
-  var params = {
+  let params = {
     TableName : tableName,
     Key: { id: id },
   };
@@ -36,12 +36,12 @@ exports.getByIdHandler = async (event) => {
     body: item
   };
 
-  const params = {
+  const params2 = {
     MessageBody: JSON.stringify([{a:1}, {a:2}]),
     QueueUrl: 'arn:aws:sqs:es-west-1:613436970855:StockSqsQueue',
   };
 
-  await sqs.sendMessage(params).promise();
+  await sqs.sendMessage(params2).promise();
 
  
   // All log statements are written to CloudWatch
