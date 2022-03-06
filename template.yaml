@@ -46,6 +46,15 @@ Resources:
                 Action:
                   - logs:*
                 Resource: arn:aws:logs:*:*:*
+        - PolicyName: dynamodb_ECOM_table_access
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:*
+                Resource:
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/ECOM_*"
 
   getAllItemsFunction:
     Type: AWS::Serverless::Function
@@ -125,6 +134,26 @@ Resources:
             Method: POST
 
 
+# ============================= demo =======================
+
+  checkoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Handler: app/checkout.handler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP post method to add one item to a DynamoDB table.
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /checkout
+            Method: post
+
   StockSQSQueueFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -146,6 +175,55 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
+
+  StockChangeTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ECOM_stock_change
+      AttributeDefinitions:
+        - AttributeName: "stock_id"
+          AttributeType: "S"
+        - AttributeName: "created_at"
+          AttributeType: "S"
+        - AttributeName: "action" #hold, set, sold
+          AttributeType: "S"
+        # - AttributeName: "action_amount"
+        #   AttributeType: "N"
+        - AttributeName: "reference"
+          AttributeType: "S"
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: "stock_id"
+          KeyType: "HASH"
+        - AttributeName: "created_at"
+          KeyType: "RANGE"
+      GlobalSecondaryIndexes:
+        - IndexName: action-created_at-index
+          KeySchema:
+            - AttributeName: "action"
+              KeyType: "HASH"
+            - AttributeName: "created_at"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+        - IndexName: reference-index
+          KeySchema:
+            - AttributeName: "reference"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: ALL
+
+  StockHoldTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ECOM_stock_hold
+      AttributeDefinitions:
+        - AttributeName: "ref"
+          AttributeType: "S"
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: "ref"
+          KeyType: "HASH"
 
   StockSqsQueue:
       Type: AWS::SQS::Queue
