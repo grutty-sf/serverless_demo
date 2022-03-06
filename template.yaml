@@ -102,6 +102,19 @@ Resources:
   # Simple syntax to create a DynamoDB table with a single attribute primary key, more in
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
 
+
+  StockSQSQueueFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app/stock_mgt.handler
+      Runtime: nodejs14.x
+      Events:
+        MySQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt MySqsQueue.Arn
+            BatchSize: 10
+
   # DynamoDB table to store item: {id: &lt;ID&gt;, name: &lt;NAME&gt;}
   SampleTable:
     Type: AWS::Serverless::SimpleTable
@@ -112,6 +125,11 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
+
+  StockSqsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        Queue: arn:aws:sqs:es-west-1:613436970855:StockSqsQueue
 
 Outputs:
   WebEndpoint:

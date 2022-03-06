@@ -7,6 +7,8 @@ const tableName = process.env.SAMPLE_TABLE;
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
+const sqs = new AWS.SQS({ apiVersion: "2012-11-05" });
+
 /**
  * A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
  */
@@ -31,8 +33,16 @@ exports.getByIdHandler = async (event) => {
  
   const response = {
     statusCode: 200,
-    body: 222222222
+    body: item
   };
+
+  const params = {
+    MessageBody: JSON.stringify([{a:1}, {a:2}]),
+    QueueUrl: 'arn:aws:sqs:es-west-1:613436970855:StockSqsQueue',
+  };
+
+  await sqs.sendMessage(params).promise();
+
  
   // All log statements are written to CloudWatch
   console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
