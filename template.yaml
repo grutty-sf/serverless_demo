@@ -109,10 +109,10 @@ Resources:
       Handler: app/stock_mgt.handler
       Runtime: nodejs14.x
       Events:
-        StockSqsQueue:
+        StockSqsEvent:
           Type: SQS
           Properties:
-            Queue: arn:aws:sqs:eu-west-1:613436970855:StockSqsQueue
+            Queue: !GetAtt StockSqsQueue.Arn
             BatchSize: 10
             Enabled: false
 
@@ -129,8 +129,6 @@ Resources:
 
   StockSqsQueue:
       Type: AWS::SQS::Queue
-      Properties:
-        Queue: arn:aws:sqs:eu-west-1:613436970855:StockSqsQueue
 
 Outputs:
   WebEndpoint:
