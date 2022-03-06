@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
 const DB = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = async function(event, context) {
+exports.handler = async (event, context) => {
     console.log('sqs handler')
     event.Records.forEach(record => {
       let body = JSON.parse(record.body)
@@ -26,7 +26,7 @@ exports.handler = async function(event, context) {
           }
         })
 
-        await DB.batchWrite({
+        /* await DB.batchWrite({
           RequestItems: {
             ECOM_stock_change: itemsSold
           },
@@ -36,9 +36,9 @@ exports.handler = async function(event, context) {
           RequestItems: {
             ECOM_stock_hold: itemsHold
           },
-        }).promise();
+        }).promise(); */
       } catch (error) {
-        console.log(error);
+        console.log('123', error);
       }
 
 
