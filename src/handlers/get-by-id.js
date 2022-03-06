@@ -7,7 +7,7 @@ const AWS = require("aws-sdk");
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
-const sqs = new AWS.SQS({ apiVersion: "2012-11-05" });
+const sqs = new AWS.SQS();
 
 /**
  * A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
