@@ -9,7 +9,8 @@ exports.handler = async function(event, context) {
     // All log statements are written to CloudWatch
     console.info('received:', event);
 
-    // Get id and name from the body of the request
+    try {
+         // Get id and name from the body of the request
     const body = JSON.parse(event.body)
     let id = body.id;
 
@@ -45,4 +46,15 @@ exports.handler = async function(event, context) {
     // All log statements are written to CloudWatch
     console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
     return response;
+    } catch (error) {
+      return {
+        statusCode: 500,
+        headers: {
+          "content-type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify(error),
+      }
+    }
+ 
 }
