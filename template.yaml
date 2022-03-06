@@ -109,10 +109,10 @@ Resources:
       Handler: app/stock_mgt.handler
       Runtime: nodejs14.x
       Events:
-        MySQSEvent:
+        StockSqsQueue:
           Type: SQS
           Properties:
-            Queue: !GetAtt MySqsQueue.Arn
+            Queue: !GetAtt StockSqsQueue.Arn
             BatchSize: 10
 
   # DynamoDB table to store item: {id: &lt;ID&gt;, name: &lt;NAME&gt;}
