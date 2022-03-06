@@ -37,6 +37,14 @@ Resources:
                 Action:
                   - sqs:SendMessage
                 Resource: !GetAtt StockSqsQueue.Arn
+        - PolicyName: allowLogging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:*
+                Resource: arn:aws:logs:*:*:*
 
   getAllItemsFunction:
     Type: AWS::Serverless::Function
