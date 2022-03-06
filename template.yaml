@@ -112,8 +112,9 @@ Resources:
         StockSqsQueue:
           Type: SQS
           Properties:
-            Queue: !GetAtt StockSqsQueue.Arn
+            Queue: arn:aws:sqs:eu-west-1:613436970855:StockSqsQueue
             BatchSize: 10
+            Enabled: false
 
   # DynamoDB table to store item: {id: &lt;ID&gt;, name: &lt;NAME&gt;}
   SampleTable:
@@ -129,7 +130,7 @@ Resources:
   StockSqsQueue:
       Type: AWS::SQS::Queue
       Properties:
-        Queue: arn:aws:sqs:es-west-1:613436970855:StockSqsQueue
+        Queue: arn:aws:sqs:eu-west-1:613436970855:StockSqsQueue
 
 Outputs:
   WebEndpoint:
