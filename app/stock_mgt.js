@@ -10,6 +10,22 @@ exports.handler = async function(event, context) {
       let itemsHold = [];
       let itemsSold = [];
 
+      try {
+        body.forEach(item => {
+          let i = {
+            PutRequest: { Item: item},
+          }
+          if(item.action == 'hold') {
+            itemsHold.push(i);
+          } else {
+            itemsSold.push(i)
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      }
+
+
       /* await DB.batchWrite({
         RequestItems: {
           ECOM_stock_change: batchWrite.map((h) => {

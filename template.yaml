@@ -145,6 +145,10 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          STOCK_SQS_URL: !Ref StockSqsQueue
       Timeout: 100
       Description: A simple example includes a HTTP post method to add one item to a DynamoDB table.
       Events:
