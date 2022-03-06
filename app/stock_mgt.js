@@ -16,27 +16,33 @@ exports.handler = async function(event, context) {
             PutRequest: { Item: item},
           }
           if(item.action == 'hold') {
-            itemsHold.push(i);
+            itemsHold.push({
+              PutRequest: { Item: item },
+            });
           } else {
-            itemsSold.push(i)
+            itemsSold.push({
+              PutRequest: { Item: item.obj },
+            })
           }
         })
+
+        await DB.batchWrite({
+          RequestItems: {
+            ECOM_stock_change: itemsSold
+          },
+        }).promise();
+
+        await DB.batchWrite({
+          RequestItems: {
+            ECOM_stock_hold: itemsHold
+          },
+        }).promise();
       } catch (error) {
         console.log(error);
       }
 
 
-      /* await DB.batchWrite({
-        RequestItems: {
-          ECOM_stock_change: batchWrite.map((h) => {
-            return {
-              PutRequest: {
-                Item: h,
-              },
-            };
-          }),
-        },
-      }).promise(); */
+
 
     });
     return {};
