@@ -28,12 +28,10 @@ exports.getByIdHandler = async (event) => {
     TableName : tableName,
     Key: { id: id },
   };
-  const data = await docClient.get(params).promise();
-  const item = data.Item;
  
   const response = {
     statusCode: 200,
-    body: item
+    body: 22222222
   };
   console.log('response', response);
 
