@@ -16,7 +16,7 @@ exports.handler = async function(event, context) {
 
     const response = {
         statusCode: 200,
-        body: JSON.stringify(body)
+        body: JSON.stringify({id})
     };
 
     const params = {
