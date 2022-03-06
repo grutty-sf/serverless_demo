@@ -136,7 +136,6 @@ Resources:
           Properties:
             Queue: !GetAtt StockSqsQueue.Arn
             BatchSize: 10
-            Enabled: false
 
   SampleTable:
     Type: AWS::Serverless::SimpleTable
