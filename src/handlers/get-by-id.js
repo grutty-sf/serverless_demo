@@ -2,7 +2,7 @@
 
 // Get the DynamoDB table name from environment variables
 const tableName = process.env.SAMPLE_TABLE;
-
+const AWS = require("aws-sdk");
 // Create a DocumentClient that represents the query to add an item
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
@@ -35,13 +35,16 @@ exports.getByIdHandler = async (event) => {
     statusCode: 200,
     body: item
   };
+  console.log('response', response);
 
   const params2 = {
     MessageBody: JSON.stringify([{a:1}, {a:2}]),
-    QueueUrl: 'arn:aws:sqs:es-west-1:613436970855:StockSqsQueue',
+    QueueUrl: process.env.STOCK_SQS_URL,
   };
 
+  console.log('sqs send', params2);
   await sqs.sendMessage(params2).promise();
+  console.log('sqs send ok', );
 
  
   // All log statements are written to CloudWatch
