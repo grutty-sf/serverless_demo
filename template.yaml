@@ -163,7 +163,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: app/stock_mgt.handler
-      Role: !GetAtt LambdaExecutionRole.Arn
       Runtime: nodejs14.x
       Environment:
         Variables:
