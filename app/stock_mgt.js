@@ -26,15 +26,16 @@ exports.handler = async (event, context) => {
 
       try {
         if(actionOther.length > 0) {
-          DB.batchWrite({
+          await DB.batchWrite({
             RequestItems: {
               ECOM_stock_change: actionOther
             },
           }).promise()
         }
 
+        console.log('hold', JSON.stringify(actionHold));
         if(actionHold.length > 0) {
-          DB.batchWrite({
+          await DB.batchWrite({
             RequestItems: {
               ECOM_stock_hold: actionHold
             },
