@@ -238,6 +238,13 @@ Resources:
           KeyType: "HASH"
         - AttributeName: "created_at"
           KeyType: "RANGE"
+      GlobalSecondaryIndexes:
+        - IndexName: created_at-index
+          KeySchema:
+            - AttributeName: "created_at"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: ALL
 
   StockSqsQueue:
       Type: AWS::SQS::Queue

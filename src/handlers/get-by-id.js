@@ -42,8 +42,7 @@ exports.getByIdHandler = async (event) => {
       "#created_at": "created_at",
     },
     ExpressionAttributeValues: {
-      ":action": "hold",
-      ":pre10min": moment().subtract(holdMinutes, "minutes").toISOString(),
+      ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
     },
     ProjectionExpression: "stock_id,action_amount",
   }).promise();
