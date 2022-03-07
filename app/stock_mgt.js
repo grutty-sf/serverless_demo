@@ -7,34 +7,35 @@ exports.handler = async (event, context) => {
       let body = JSON.parse(record.body)
       console.log(`sqs body ${body}`);
 
-      let itemsHold = [];
-      let itemsSold = [];
+      let actionHold = [];
+      let actionOther = [];
 
       try {
         body.forEach(item => {
           if(item.action == 'hold') {
-            itemsHold.push({
+            actionHold.push({
               PutRequest: { Item: item },
             });
           } else {
-            itemsSold.push({
+            actionOther.push({
               PutRequest: { Item: item.obj },
             })
           }
         })
 
-        if(itemsSold.length > 0) {
+        console.log('stock data', actionHold, actionOther);
+        if(actionOther.length > 0) {
           DB.batchWrite({
             RequestItems: {
-              ECOM_stock_change: itemsSold
+              ECOM_stock_change: actionOther
             },
           })
         }
 
-        if(itemsHold.length > 0) {
+        if(actionHold.length > 0) {
           DB.batchWrite({
             RequestItems: {
-              ECOM_stock_hold: itemsHold
+              ECOM_stock_hold: actionHold
             },
           })
         }
