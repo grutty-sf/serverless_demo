@@ -4,6 +4,9 @@
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
+const AWS = require("aws-sdk");
+const DB = new AWS.DynamoDB.DocumentClient();
+
 // Get the DynamoDB table name from environment variables
 const tableName = process.env.SAMPLE_TABLE;
 
@@ -36,7 +39,7 @@ exports.putItemHandler = async (event) => {
         body: JSON.stringify(body)
     };
 
-    await docClient.put(
+    await DB.put(
         {
           action: "hold",
           ref: `checkout_id${id}`,
