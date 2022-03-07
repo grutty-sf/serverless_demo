@@ -33,7 +33,7 @@ exports.getByIdHandler = async (event) => {
     QueueUrl: process.env.STOCK_SQS_URL,
   };
 
-  let params = {
+  let params2 = {
     TableName: stockChangeTableName,
     //  ScanIndexForward: false,
     FilterExpression: "created_at > :pre10min",
@@ -41,7 +41,7 @@ exports.getByIdHandler = async (event) => {
       ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
     },
   };
-  let c = await DB.scan(params).promise()
+  let c = await DB.scan(params2).promise()
   console.log(1111111111111, c);
 
   let b = await DB.query({

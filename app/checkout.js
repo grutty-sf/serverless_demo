@@ -1,5 +1,4 @@
 const AWS = require("aws-sdk");
-const DB = new AWS.DynamoDB.DocumentClient();
 const sqs = new AWS.SQS();
 
 exports.handler = async function(event, context) {
@@ -9,8 +8,7 @@ exports.handler = async function(event, context) {
     // All log statements are written to CloudWatch
     console.info('received:', event);
 
-    try {
-         // Get id and name from the body of the request
+    // Get id and name from the body of the request
     const body = JSON.parse(event.body)
     let id = body.id;
 
@@ -38,18 +36,11 @@ exports.handler = async function(event, context) {
       QueueUrl: process.env.STOCK_SQS_URL,
     };
     
-      console.log('sqs send', params);
-      await sqs.sendMessage(params).promise();
-      console.log('sqs send ok', );
+    console.log('sqs send', params);
+    await sqs.sendMessage(params).promise();
+    console.log('sqs send ok', );
 
     // All log statements are written to CloudWatch
     console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
     return response;
-    } catch (error) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify(error),
-      }
-    }
- 
 }
