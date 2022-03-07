@@ -3,6 +3,7 @@ const DB = new AWS.DynamoDB.DocumentClient();
 
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
+const tableName = process.env.STOCK_HOLD_TABLE;
 
 exports.handler = async (event, context) => {
     console.log('sqs handler')
@@ -38,7 +39,7 @@ exports.handler = async (event, context) => {
         if(actionHold.length > 0) {
           DB.batchWrite({
             RequestItems: {
-              ECOM_stock_hold: actionHold
+              [tableName]: actionHold
             },
           }).promise()
 
