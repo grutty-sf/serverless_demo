@@ -31,7 +31,6 @@ exports.handler = async function(event, context) {
                   action: "hold",
                   action_amount: 123,
                   reference: `checkout_id${id}`,
-                  stock_amount: 10,
               }
             }
           ]

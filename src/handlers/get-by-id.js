@@ -1,9 +1,9 @@
-const tableName = process.env.SAMPLE_TABLE;
 const AWS = require("aws-sdk");
 const DB = new AWS.DynamoDB.DocumentClient();
+const moment = require("moment");
 
-const dynamodb = require('aws-sdk/clients/dynamodb');
-const docClient = new dynamodb.DocumentClient();
+const stockChangeTableName = 'ECOM_stock_change';
+const stockHoldTableName = 'ECOM_stock_hold';
 
 const sqs = new AWS.SQS();
 
@@ -16,37 +16,23 @@ exports.getByIdHandler = async (event) => {
  
   const id = event.pathParameters.id;
  
-  const response = {
-    statusCode: 200,
-    body: id
-  };
-  console.log('response', response);
+  let b = await DB.query({
+    TableName: stockHoldTableName,
+    KeyConditionExpression: "#created_at > :pre10min",
+    ExpressionAttributeNames: {
+      "#created_at": "created_at",
+    },
+    ExpressionAttributeValues: {
+      ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
+    },
+    ProjectionExpression: "stock_id,action_amount",
+  }).promise();
 
-  const params = {
-    MessageBody: JSON.stringify(
-      [
-        {
-          action: "hold",
-          ref: `checkout_id${id}`,
-          obj: {
-              stock_id: `stock_id${id}`,
-              created_at: new Date().toISOString(),
-              action: "hold",
-              action_amount: 123,
-              reference: `checkout_id${id}`,
-              stock_amount: 10,
-          }
-        }
-      ]
-    ),
-    QueueUrl: process.env.STOCK_SQS_URL,
-  };
-
-  console.log('sqs send', params);
-  await sqs.sendMessage(params).promise();
-  console.log('sqs send ok', );
-
+  // await sqs.sendMessage(params).promise();
+  console.log('stock hold', JSON.stringify(b.Items));
  
-  console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
-  return response;
+  return {
+    statusCode: 200,
+    body: JSON.stringify(b.Items)
+  };;
 }

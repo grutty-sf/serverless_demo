@@ -227,12 +227,16 @@ Resources:
     Properties:
       TableName: ECOM_stock_hold
       AttributeDefinitions:
-        - AttributeName: "ref"
+        - AttributeName: "stock_id"
+          AttributeType: "S"
+        - AttributeName: "created_at"
           AttributeType: "S"
       BillingMode: PAY_PER_REQUEST
       KeySchema:
-        - AttributeName: "ref"
+        - AttributeName: "stock_id"
           KeyType: "HASH"
+        - AttributeName: "created_at"
+          KeyType: "RANGE"
 
   StockSqsQueue:
       Type: AWS::SQS::Queue
