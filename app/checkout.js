@@ -20,23 +20,23 @@ exports.handler = async function(event, context) {
     };
 
     const params = {
-        MessageBody: JSON.stringify(
-          [
-            {
-              action: "hold",
-              ref: `checkout_id${id}`,
-              obj: {
-                  stock_id: `stock_id${id}`,
-                  created_at: new Date().toISOString(),
-                  action: "hold",
-                  action_amount: 123,
-                  reference: `checkout_id${id}`,
-              }
+      MessageBody: JSON.stringify(
+        [
+          {
+            action: "hold",
+            ref: `checkout_id${id}`,
+            obj: {
+                stock_id: `stock_id${id}`,
+                created_at: new Date().toISOString(),
+                action: "hold",
+                action_amount: 123,
+                reference: `checkout_id${id}`,
             }
-          ]
-        ),
-        QueueUrl: process.env.STOCK_SQS_URL,
-      };
+          }
+        ]
+      ),
+      QueueUrl: process.env.STOCK_SQS_URL,
+    };
     
       console.log('sqs send', params);
       await sqs.sendMessage(params).promise();
