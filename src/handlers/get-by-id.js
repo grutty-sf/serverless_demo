@@ -52,7 +52,7 @@ exports.getByIdHandler = async (event) => {
 
   let b = await DB.query({
     TableName: stockChangeTableName,
-    IndexName: "create_at-index",
+    IndexName: "created_at-index",
     KeyConditionExpression: "#created_at > :pre10min",
     ExpressionAttributeNames: {
       "#created_at": "created_at",
