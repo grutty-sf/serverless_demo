@@ -56,40 +56,6 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/ECOM_*"
 
-
-  LambdaExecution2Role:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Path: "/"
-      Policies:
-        - PolicyName: allowLogging
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:*
-                Resource: arn:aws:logs:*:*:*
-        - PolicyName: dynamodb_ECOM_table_access
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - dynamodb:*
-                Resource:
-                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/ECOM_*"
-
-
   getAllItemsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -196,7 +162,6 @@ Resources:
   StockSQSQueueFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt LambdaExecution2Role.Arn
       Handler: app/stock_mgt.handler
       Runtime: nodejs14.x
       Environment:
