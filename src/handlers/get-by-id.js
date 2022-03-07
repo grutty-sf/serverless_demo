@@ -2,10 +2,9 @@ const AWS = require("aws-sdk");
 const DB = new AWS.DynamoDB.DocumentClient();
 const sqs = new AWS.SQS();
 
+const moment = require("moment");
 const stockChangeTableName = 'ECOM_stock_change';
 const stockHoldTableName = 'ECOM_stock_hold';
-
-
 
 exports.getByIdHandler = async (event) => {
   if (event.httpMethod !== 'GET') {

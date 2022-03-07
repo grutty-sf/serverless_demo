@@ -136,7 +136,6 @@ Resources:
 
 
 # ============================= demo =======================
-
   checkoutFunction:
     Type: AWS::Serverless::Function
     Properties:

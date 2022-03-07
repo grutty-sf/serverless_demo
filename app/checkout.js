@@ -47,11 +47,7 @@ exports.handler = async function(event, context) {
     return response;
     } catch (error) {
       return {
-        statusCode: 500,
-        headers: {
-          "content-type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
+        statusCode: 200,
         body: JSON.stringify(error),
       }
     }
