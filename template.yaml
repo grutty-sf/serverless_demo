@@ -36,7 +36,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - sqs:SendMessage
+                  - sqs:*
                 Resource: !GetAtt StockSqsQueue.Arn
         - PolicyName: allowLogging
           PolicyDocument:
@@ -123,6 +123,7 @@ Resources:
         # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref SampleTable
+            Action: Allow
       Environment:
         Variables:
           # Make table name accessible as environment variable from function code during execution
