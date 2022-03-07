@@ -2,6 +2,9 @@ const tableName = process.env.SAMPLE_TABLE;
 const AWS = require("aws-sdk");
 const DB = new AWS.DynamoDB.DocumentClient();
 
+const dynamodb = require('aws-sdk/clients/dynamodb');
+const docClient = new dynamodb.DocumentClient();
+
 const sqs = new AWS.SQS();
 
 
@@ -38,21 +41,6 @@ exports.getByIdHandler = async (event) => {
     ),
     QueueUrl: process.env.STOCK_SQS_URL,
   };
-
-  const result = await DB.put(
-    {
-      action: "hold",
-      ref: `checkout_id${id}`,
-      obj: {
-          stock_id: `stock_id${id}`,
-          created_at: new Date().toISOString(),
-          action: "hold",
-          action_amount: 123,
-          reference: `checkout_id${id}`,
-          stock_amount: 10,
-      }
-    }
-  ).promise();
 
   console.log('sqs send', params);
   await sqs.sendMessage(params).promise();

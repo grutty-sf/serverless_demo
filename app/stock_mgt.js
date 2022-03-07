@@ -42,7 +42,7 @@ exports.handler = async (event, context) => {
             },
           }).promise()
 
-          const result = await docClient.put(
+          /* docClient.put(
             {
               action: "hold",
               ref: `checkout_id${id}`,
@@ -55,7 +55,7 @@ exports.handler = async (event, context) => {
                   stock_amount: 10,
               }
             }
-          ).promise();
+          ).promise(); */
         }
       } catch (error) {
         console.log('123', error);

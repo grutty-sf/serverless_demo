@@ -36,6 +36,21 @@ exports.putItemHandler = async (event) => {
         body: JSON.stringify(body)
     };
 
+    await docClient.put(
+        {
+          action: "hold",
+          ref: `checkout_id${id}`,
+          obj: {
+              stock_id: `stock_id${id}`,
+              created_at: new Date().toISOString(),
+              action: "hold",
+              action_amount: 123,
+              reference: `checkout_id${id}`,
+              stock_amount: 10,
+          }
+        }
+      ).promise();
+
     // All log statements are written to CloudWatch
     console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
     return response;
