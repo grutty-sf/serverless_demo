@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
             RequestItems: {
               ECOM_stock_change: actionOther
             },
-          })
+          }).promise()
         }
 
         if(actionHold.length > 0) {
@@ -37,7 +37,7 @@ exports.handler = async (event, context) => {
             RequestItems: {
               ECOM_stock_hold: actionHold
             },
-          })
+          }).promise()
         }
       } catch (error) {
         console.log('123', error);
