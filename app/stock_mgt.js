@@ -23,17 +23,21 @@ exports.handler = async (event, context) => {
           }
         })
 
-        await DB.batchWrite({
-          RequestItems: {
-            ECOM_stock_change: itemsSold
-          },
-        }).promise();
+        if(itemsSold.length > 0) {
+          DB.batchWrite({
+            RequestItems: {
+              ECOM_stock_change: itemsSold
+            },
+          })
+        }
 
-        await DB.batchWrite({
-          RequestItems: {
-            ECOM_stock_hold: itemsHold
-          },
-        }).promise();
+        if(itemsHold.length > 0) {
+          DB.batchWrite({
+            RequestItems: {
+              ECOM_stock_hold: itemsHold
+            },
+          })
+        }
       } catch (error) {
         console.log('123', error);
       }
