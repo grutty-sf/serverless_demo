@@ -43,17 +43,11 @@ exports.putItemHandler = async (event) => {
         {
             TableName: 'ECOM_stock_hold',
             Item: {
-                action: "hold",
-                ref: `checkout_id${id}`,
-                obj: {
-                    stock_id: `stock_id${id}`,
-                    created_at: new Date().toISOString(),
-                    action: "hold",
-                    action_amount: 123,
-                    reference: `checkout_id${id}`,
-                    stock_amount: 10,
-                }
-              }
+                stock_id: `stock_id${id}`,
+                created_at: new Date().toISOString(),
+                action_amount: 123,
+                reference: `checkout_id${id}`,
+            }
         }
       ).promise();
 

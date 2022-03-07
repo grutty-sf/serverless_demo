@@ -33,6 +33,17 @@ exports.getByIdHandler = async (event) => {
     QueueUrl: process.env.STOCK_SQS_URL,
   };
 
+  let params = {
+    TableName: stockChangeTableName,
+    //  ScanIndexForward: false,
+    FilterExpression: "created_at > :pre10min",
+    ExpressionAttributeValues: {
+      ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
+    },
+  };
+  let c = await DB.scan(params).promise()
+  console.log(1111111111111, c);
+
   let b = await DB.query({
     TableName: stockChangeTableName,
     IndexName: "created_at-index",
