@@ -23,7 +23,7 @@ exports.handler = async (event, context) => {
           }
         })
 
-        console.log('stock data', actionHold, actionOther);
+        console.log('stock data', JSON.stringify(actionHold), JSON.stringify(actionOther));
         if(actionOther.length > 0) {
           DB.batchWrite({
             RequestItems: {
