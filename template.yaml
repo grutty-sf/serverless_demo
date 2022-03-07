@@ -139,18 +139,19 @@ Resources:
   checkoutFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt LambdaExecutionRole.Arn
       Handler: app/checkout.handler
       Runtime: nodejs14.x
+      Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
         - x86_64
       MemorySize: 128
+      Timeout: 100
+      Description: A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
       Environment:
         Variables:
           # Make table name accessible as environment variable from function code during execution
+          SAMPLE_TABLE: !Ref SampleTable
           STOCK_SQS_URL: !Ref StockSqsQueue
-      Timeout: 100
-      Description: A simple example includes a HTTP post method to add one item to a DynamoDB table.
       Events:
         Api:
           Type: Api

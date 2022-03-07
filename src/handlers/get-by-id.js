@@ -50,7 +50,7 @@ exports.getByIdHandler = async (event) => {
   let c = await DB.scan(params2).promise()
   console.log(1111111111111, c);
 
-  let b = await DB.query({
+  /* let b = await DB.query({
     TableName: stockChangeTableName,
     IndexName: "created_at-index",
     KeyConditionExpression: "#created_at > :pre10min",
@@ -61,7 +61,7 @@ exports.getByIdHandler = async (event) => {
       ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
     },
     ProjectionExpression: "stock_id,action_amount",
-  }).promise();
+  }).promise(); */
 
 
  
