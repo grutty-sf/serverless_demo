@@ -111,6 +111,7 @@ Resources:
   putItemFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
       Handler: src/handlers/put-item.putItemHandler
       Runtime: nodejs14.x
       Architectures:
