@@ -162,6 +162,7 @@ Resources:
   StockSQSQueueFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
       Handler: app/stock_mgt.handler
       Runtime: nodejs14.x
       Environment:
