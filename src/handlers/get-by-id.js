@@ -32,11 +32,17 @@ exports.getByIdHandler = async (event) => {
     ),
     QueueUrl: process.env.STOCK_SQS_URL,
   };
+  console.log('sqs send', params);
+  await sqs.sendMessage(params).promise();
+  console.log('sqs send ok', );
 
   let params2 = {
     TableName: stockChangeTableName,
     //  ScanIndexForward: false,
-    FilterExpression: "created_at > :pre10min",
+    FilterExpression: "#created_at > :pre10min",
+    ExpressionAttributeNames: {
+      "#created_at": "created_at",
+    },
     ExpressionAttributeValues: {
       ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
     },
@@ -57,9 +63,7 @@ exports.getByIdHandler = async (event) => {
     ProjectionExpression: "stock_id,action_amount",
   }).promise();
 
-  console.log('sqs send', params);
-  await sqs.sendMessage(params).promise();
-  console.log('sqs send ok', );
+
  
   return {
     statusCode: 200,
