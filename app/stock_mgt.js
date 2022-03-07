@@ -34,6 +34,18 @@ exports.handler = async (event) => {
 
     });
 
+    await DB.put(
+      {
+          TableName: 'ECOM_stock_hold',
+          Item: {
+              stock_id: `stock_id9276`,
+              created_at: new Date().toISOString(),
+              action_amount: 123,
+              reference: `checkout_id1222`,
+          }
+      }
+    ).promise();
+
     try {
       if(stockChangeArr.length > 0) {
         await DB.batchWrite({
