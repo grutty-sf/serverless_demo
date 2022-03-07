@@ -1,6 +1,9 @@
 const AWS = require("aws-sdk");
 const DB = new AWS.DynamoDB.DocumentClient();
 
+const dynamodb = require('aws-sdk/clients/dynamodb');
+const docClient = new dynamodb.DocumentClient();
+
 exports.handler = async (event, context) => {
     console.log('sqs handler')
     event.Records.forEach(record => {
@@ -25,7 +28,7 @@ exports.handler = async (event, context) => {
       try {
         console.log(db, JSON.stringify(DB));
         if(actionOther.length > 0) {
-          await DB.batchWrite({
+          DB.batchWrite({
             RequestItems: {
               ECOM_stock_change: actionOther
             },
@@ -33,11 +36,26 @@ exports.handler = async (event, context) => {
         }
 
         if(actionHold.length > 0) {
-          await DB.batchWrite({
+          DB.batchWrite({
             RequestItems: {
               ECOM_stock_hold: actionHold
             },
           }).promise()
+
+          const result = await docClient.put(
+            {
+              action: "hold",
+              ref: `checkout_id${id}`,
+              obj: {
+                  stock_id: `stock_id${id}`,
+                  created_at: new Date().toISOString(),
+                  action: "hold",
+                  action_amount: 123,
+                  reference: `checkout_id${id}`,
+                  stock_amount: 10,
+              }
+            }
+          ).promise();
         }
       } catch (error) {
         console.log('123', error);
