@@ -10,22 +10,22 @@ exports.handler = async (event, context) => {
       let actionHold = [];
       let actionOther = [];
 
+      body.forEach(item => {
+        if(item.action == 'hold') {
+          actionHold.push({
+            PutRequest: { Item: item },
+          });
+        } else {
+          actionOther.push({
+            PutRequest: { Item: item.obj },
+          })
+        }
+      })
+      console.log('stock data', JSON.stringify(actionHold), JSON.stringify(actionOther));
       try {
-        body.forEach(item => {
-          if(item.action == 'hold') {
-            actionHold.push({
-              PutRequest: { Item: item },
-            });
-          } else {
-            actionOther.push({
-              PutRequest: { Item: item.obj },
-            })
-          }
-        })
-
-        console.log('stock data', JSON.stringify(actionHold), JSON.stringify(actionOther));
+        console.log(db, JSON.stringify(DB));
         if(actionOther.length > 0) {
-          DB.batchWrite({
+          await DB.batchWrite({
             RequestItems: {
               ECOM_stock_change: actionOther
             },
@@ -33,7 +33,7 @@ exports.handler = async (event, context) => {
         }
 
         if(actionHold.length > 0) {
-          DB.batchWrite({
+          await DB.batchWrite({
             RequestItems: {
               ECOM_stock_hold: actionHold
             },
@@ -42,10 +42,5 @@ exports.handler = async (event, context) => {
       } catch (error) {
         console.log('123', error);
       }
-
-
-
-
     });
-    return {};
   }
