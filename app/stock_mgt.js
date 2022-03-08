@@ -1,4 +1,4 @@
-const AWS = require("./aws-config")();
+const AWS = require("aws-sdk");
 const DB = new AWS.DynamoDB.DocumentClient();
 
 const stockChangeTableName = 'ECOM_stock_change';
