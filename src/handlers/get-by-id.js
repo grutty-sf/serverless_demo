@@ -51,7 +51,7 @@ exports.getByIdHandler = async (event) => {
   console.log(1111111111111, c); */
 
   let b = await DB.query({
-    TableName: stockChangeTableName,
+    TableName: stockHoldTableName,
     IndexName: "created_at-index",
     KeyConditionExpression: "#created_at > :pre10min",
     ExpressionAttributeNames: {
