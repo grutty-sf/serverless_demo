@@ -1,6 +1,8 @@
 const AWS = require("aws-sdk");
 const sqs = new AWS.SQS();
 
+const DB = new AWS.DynamoDB.DocumentClient();
+
 exports.handler = async function(event, context) {
     if (event.httpMethod !== 'POST') {
         throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
