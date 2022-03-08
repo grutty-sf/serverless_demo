@@ -237,8 +237,6 @@ Resources:
       KeySchema:
         - AttributeName: "stock_id"
           KeyType: "HASH"
-        - AttributeName: "created_at"
-          KeyType: "RANGE"
       GlobalSecondaryIndexes:
         - IndexName: created_at-index
           KeySchema:
