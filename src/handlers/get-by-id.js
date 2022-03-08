@@ -14,29 +14,7 @@ exports.getByIdHandler = async (event) => {
  
   const id = event.pathParameters.id;
  
-  const params = {
-    MessageBody: JSON.stringify(
-      [
-        {
-          action: "hold",
-          ref: `checkout_id${id}`,
-          obj: {
-              stock_id: `stock_id${id}`,
-              created_at: new Date().toISOString(),
-              action: "change",
-              action_amount: 123,
-              reference: `checkout_id${id}`,
-          }
-        }
-      ]
-    ),
-    QueueUrl: process.env.STOCK_SQS_URL,
-  };
-  console.log('sqs send', params);
-  await sqs.sendMessage(params).promise();
-  console.log('sqs send ok', );
-
-  let params2 = {
+  let params = {
     TableName: stockHoldTableName,
     //  ScanIndexForward: false,
     FilterExpression: "#created_at > :pre10min",
@@ -47,7 +25,7 @@ exports.getByIdHandler = async (event) => {
       ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
     },
   };
-  let c = await DB.scan(params2).promise()
+  let c = await DB.scan(params).promise()
   console.log(1111111111111, c);
 
   /* Items: [
@@ -77,8 +55,6 @@ exports.getByIdHandler = async (event) => {
     },
     ProjectionExpression: "stock_id,action_amount",
   }).promise(); */
-
-
  
   return {
     statusCode: 200,
