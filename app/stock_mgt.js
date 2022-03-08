@@ -36,6 +36,7 @@ exports.handler = async (event) => {
             },
           }).promise();
 
+          console.log('stock', stock);
           if(stock?.item) {
             item.stock_amount = stock.item.amount;
           }
