@@ -28,16 +28,16 @@ exports.handler = async function(event, context) {
       }
     }).promise()
     
+    let created_at = new Date().toISOString();
+    
     await sqs.sendMessage({
       MessageBody: JSON.stringify({
         action: "hold",
-        ref: `checkout_id${id}`,
+        ref: id, // checkoutid
         obj: {
             stock_id: `${id}`,
-            created_at: new Date().toISOString(),
-            action: "hold",
             action_amount: 11,
-            reference: `checkout_id${id}`,
+            created_at,
         }
       }),
       QueueUrl: process.env.STOCK_SQS_URL,
@@ -46,13 +46,11 @@ exports.handler = async function(event, context) {
     await sqs.sendMessage({
       MessageBody: JSON.stringify({
         action: "sold",
-        ref: `order_id${id}`,
+        ref: `order_id${id}`, // orderid?
         obj: {
             stock_id: `${id}`,
-            created_at: new Date().toISOString(),
-            action: "sold",
+            created_at,
             action_amount: 11,
-            reference: `order_id${id}`,
         }
       }),
       QueueUrl: process.env.STOCK_SQS_URL,

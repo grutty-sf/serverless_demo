@@ -1,4 +1,4 @@
-const AWS = require("aws-sdk");
+const AWS = require("./aws-config")();
 const DB = new AWS.DynamoDB.DocumentClient();
 
 const stockChangeTableName = 'ECOM_stock_change';
@@ -10,7 +10,6 @@ exports.handler = async (event) => {
 
     for (const record of event.Records) {
       let body = JSON.parse(record.body)
-      console.log(`sqs body ${JSON.stringify(body)}`);
 
       let item = { 
         stock_id: body.obj.stock_id,
@@ -20,6 +19,7 @@ exports.handler = async (event) => {
       }
 
       try {
+        // if hold, work with ECOM_stock_hold table
         if(body.action == 'hold') {
           await DB.put({
             TableName: stockHoldTableName,
@@ -27,17 +27,18 @@ exports.handler = async (event) => {
           }).promise()
 
         } else {
+          // if other action, work with ECOM_stock_change table
           item.action = body.action;
 
+          // means the stock amount after this action
           let stock = await DB.get({
             TableName: stockTableName,
             Key: {
               stock_id: item.stock_id,
             },
           }).promise();
-
           console.log('stock', stock);
-          if(stock?.item) {
+          if(stock?.Item) {
             item.stock_amount = stock.item.amount;
           }
 

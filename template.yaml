@@ -258,6 +258,12 @@ Resources:
               KeyType: "HASH"
           Projection:
             ProjectionType: ALL
+        - IndexName: reference-index
+          KeySchema:
+            - AttributeName: "reference"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: ALL
 
   StockSqsQueue:
       Type: AWS::SQS::Queue

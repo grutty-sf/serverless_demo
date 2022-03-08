@@ -14,7 +14,7 @@ exports.getByIdHandler = async (event) => {
  
   const id = event.pathParameters.id;
  
-  let params = {
+  let c = await DB.scan({
     TableName: stockHoldTableName,
     //  ScanIndexForward: false,
     FilterExpression: "#created_at > :pre10min",
@@ -24,9 +24,21 @@ exports.getByIdHandler = async (event) => {
     ExpressionAttributeValues: {
       ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
     },
-  };
-  let c = await DB.scan(params).promise()
-  console.log(1111111111111, c);
+    ProjectionExpression: "stock_id,action_amount",
+  }).promise()
+
+  let b = await DB.query({
+    TableName: stockHoldTableName,
+    IndexName: "reference-index",
+    KeyConditionExpression: "#ref = :ref",
+    ExpressionAttributeNames: {
+      "#ref": "reference",
+    },
+    ExpressionAttributeValues: {
+      ":ref": checkout.checkout_id,
+    },
+    ProjectionExpression: "stock_id,created_at",
+  }).promise()
 
   /* Items: [
     {
@@ -58,6 +70,9 @@ exports.getByIdHandler = async (event) => {
  
   return {
     statusCode: 200,
-    body: JSON.stringify(c.Items)
+    body: JSON.stringify({
+      a: c.Items,
+      b: b.Items
+    })
   };
 }
