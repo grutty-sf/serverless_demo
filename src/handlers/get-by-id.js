@@ -22,7 +22,7 @@ exports.getByIdHandler = async (event) => {
       "#created_at": "created_at",
     },
     ExpressionAttributeValues: {
-      ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
+      ":pre10min": moment().subtract(Number(id), "minutes").toISOString(), // todo
     },
     ProjectionExpression: "stock_id,action_amount",
   }).promise()
@@ -35,7 +35,7 @@ exports.getByIdHandler = async (event) => {
       "#ref": "reference",
     },
     ExpressionAttributeValues: {
-      ":ref": checkout.checkout_id,
+      ":ref": '123', // todo checkout id
     },
     ProjectionExpression: "stock_id,created_at",
   }).promise()

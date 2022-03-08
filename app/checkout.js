@@ -33,9 +33,9 @@ exports.handler = async function(event, context) {
     await sqs.sendMessage({
       MessageBody: JSON.stringify({
         action: "hold",
-        ref: id, // checkoutid
+        ref: id, // todo checkoutid
         obj: {
-            stock_id: `${id}`,
+            stock_id: id, // todo
             action_amount: 11,
             created_at,
         }
@@ -46,9 +46,9 @@ exports.handler = async function(event, context) {
     await sqs.sendMessage({
       MessageBody: JSON.stringify({
         action: "sold",
-        ref: `order_id${id}`, // orderid?
+        ref: id, // todo orderid
         obj: {
-            stock_id: `${id}`,
+            stock_id: id, // todo
             created_at,
             action_amount: 11,
         }
