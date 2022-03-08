@@ -36,8 +36,8 @@ exports.getByIdHandler = async (event) => {
   await sqs.sendMessage(params).promise();
   console.log('sqs send ok', );
 
-/*   let params2 = {
-    TableName: stockChangeTableName,
+  let params2 = {
+    TableName: stockHoldTableName,
     //  ScanIndexForward: false,
     FilterExpression: "#created_at > :pre10min",
     ExpressionAttributeNames: {
@@ -48,9 +48,9 @@ exports.getByIdHandler = async (event) => {
     },
   };
   let c = await DB.scan(params2).promise()
-  console.log(1111111111111, c); */
+  console.log(1111111111111, c);
 
-  let b = await DB.query({
+  /* let b = await DB.query({
     TableName: stockHoldTableName,
     IndexName: "created_at-index",
     KeyConditionExpression: "#created_at > :pre10min",
@@ -61,12 +61,12 @@ exports.getByIdHandler = async (event) => {
       ":pre10min": moment().subtract(Number(id), "minutes").toISOString(),
     },
     ProjectionExpression: "stock_id,action_amount",
-  }).promise();
+  }).promise(); */
 
 
  
   return {
     statusCode: 200,
-    body: JSON.stringify(b.Items)
+    body: 1
   };
 }
