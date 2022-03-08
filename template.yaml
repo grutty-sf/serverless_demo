@@ -247,6 +247,8 @@ Resources:
           AttributeType: "S"
         - AttributeName: "created_at"
           AttributeType: "S"
+        - AttributeName: "reference"
+          AttributeType: "S"
       BillingMode: PAY_PER_REQUEST
       KeySchema:
         - AttributeName: "stock_id"
