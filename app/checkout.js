@@ -17,27 +17,45 @@ exports.handler = async function(event, context) {
         body: JSON.stringify({id})
     };
 
-    const params = {
-      MessageBody: JSON.stringify(
-        [
-          {
-            action: "hold",
-            ref: `checkout_id${id}`,
-            obj: {
-                stock_id: `${id}`,
-                created_at: new Date().toISOString(),
-                action: "hold",
-                action_amount: 123,
-                reference: `checkout_id${id}`,
-            }
-          }
-        ]
-      ),
-      QueueUrl: process.env.STOCK_SQS_URL,
-    };
+    // 模拟stock
+    await DB.put({
+      TableName: 'ECOM_stock',
+      Item: { 
+        stock_id: `${id}`,
+        amount: 99,
+      }
+    }).promise()
     
-    console.log('sqs send', params);
-    await sqs.sendMessage(params).promise();
+    await sqs.sendMessage({
+      MessageBody: JSON.stringify({
+        action: "hold",
+        ref: `checkout_id${id}`,
+        obj: {
+            stock_id: `${id}`,
+            created_at: new Date().toISOString(),
+            action: "hold",
+            action_amount: 11,
+            reference: `checkout_id${id}`,
+        }
+      }),
+      QueueUrl: process.env.STOCK_SQS_URL,
+    }).promise();
+
+    await sqs.sendMessage({
+      MessageBody: JSON.stringify({
+        action: "sold",
+        ref: `order_id${id}`,
+        obj: {
+            stock_id: `${id}`,
+            created_at: new Date().toISOString(),
+            action: "sold",
+            action_amount: 11,
+            reference: `order_id${id}`,
+        }
+      }),
+      QueueUrl: process.env.STOCK_SQS_URL,
+    }).promise();
+
     console.log('sqs send ok', );
 
     // All log statements are written to CloudWatch

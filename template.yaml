@@ -177,6 +177,20 @@ Resources:
             Queue: !GetAtt StockSqsQueue.Arn
             BatchSize: 10
 
+  StockTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "stock_id"
+          AttributeType: "S"
+        # - AttributeName: "amount"
+        #   AttributeType: "N"
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: "stock_id"
+          KeyType: "HASH"
+      TableName: ECOM_stock
+
   SampleTable:
     Type: AWS::Serverless::SimpleTable
     Properties:

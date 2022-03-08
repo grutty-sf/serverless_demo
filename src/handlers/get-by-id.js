@@ -50,6 +50,21 @@ exports.getByIdHandler = async (event) => {
   let c = await DB.scan(params2).promise()
   console.log(1111111111111, c);
 
+  /* Items: [
+    {
+      ref: 'checkout_id3313',
+      stock_id: '3313',
+      created_at: '2022-03-08T02:34:06.324Z',
+      action_amount: 123
+    },
+    {
+      ref: 'checkout_id1',
+      stock_id: 'stock_id1',
+      created_at: '2022-03-08T03:08:48.155Z',
+      action_amount: 123
+    }
+  ] */
+
   /* let b = await DB.query({
     TableName: stockHoldTableName,
     IndexName: "created_at-index",
@@ -67,6 +82,6 @@ exports.getByIdHandler = async (event) => {
  
   return {
     statusCode: 200,
-    body: 1
+    body: JSON.stringify(c.Items)
   };
 }
