@@ -39,7 +39,7 @@ exports.handler = async (event) => {
           }).promise();
           console.log('stock', stock);
           if(stock?.Item) {
-            item.stock_amount = stock.item.amount;
+            item.stock_amount = stock.Item.amount;
           }
 
           await DB.put({
